@@ -1,60 +1,65 @@
-const { getAllQuestions, getAllAnswers, postNewAnswer, postNewQuestion, setQuestionHelpfulness, setQuestionReported } = require('../../database/index.js')
+const { getAllQuestions, getAllAnswers, postNewAnswer, postNewQuestion, setQuestionHelpfulness, setQuestionReported, setAnswerHelpfulness, setAnswerReported } = require('../../database/index.js')
 
 module.exports = {
   getQuestions: (req, res) => {
-    const { query: { product_id } } = req || 2;
-    const { query: { page } } = req || 1;
-    const { query: { count } } = req || 5;
-    const get = getAllQuestions(params);
-    res.status(200).send(get);
+    const { query: { product_id } } = req;
+    const { query: { page } } = req;
+    const { query: { count } } = req;
+    const params = {
+      product_id: product_id,
+      page: page,
+      count: count
+    };
+    return getAllQuestions(params)
+    .then((response) => {
+      res.status(200).send(response);
+    });
+
   },
   getAnswers: (req, res) => {
-    const { query: { question_id } } = req || 2;
-    const { query: { page } } = req || 1;
-    const { query: { count } } = req || 5;
-    const get = getAllAnswers(params);
-    res.status(200).send(get);
-  },
-  postAnswer: (req, res) => {
+    console.log(req);
     const { query: { question_id } } = req;
-    const { query: { answer_id } } = req;
-    const { query: { body } } = req;
-    const { query: { date_written } } = req;
-    const { query: { answerer_name } } = req;
-    const { query: { answerer_email } } = req;
-    const { query: { reported } } = req || false;
-    const { query: { helpful } } = req || 0;
+    const { query: { page } } = req;
+    const { query: { count } } = req;
     const params = {
       question_id: question_id,
-      answer_id: answer_id,
+      page: page,
+      count: count
+    };
+    return getAllAnswers(params)
+    .then((response) => {
+      res.status(200).send(response);
+    })
+  },
+  postAnswer: (req, res) => {
+    const { body: { question_id } } = req;
+    const { body: { body } } = req;
+    const { body: { answerer_name } } = req;
+    const { body: { answerer_email } } = req;
+    const { body: { url } } = req;
+    const params = {
+      question_id: question_id,
       body: body,
-      date_written: date_written, // new Date().toISOString(),
+      date_written: new Date().toISOString(),
       answerer_name: answerer_name,
       answerer_email: answerer_email,
-      reported: reported,
-      helpful: helpful,
+      url: url
     }
     const post = postNewAnswer(params);
     res.status(200).send(post);
   },
   postQuestion: (req, res) => {
-    const { query: { id } } = req;
-    const { query: { product_id } } = req;
-    const { query: { body } } = req;
-    const { query: { date_written } } = req;
-    const { query: { asker_name } } = req;
-    const { query: { asker_email } } = req;
-    const { query: { reported } } = req || false;
-    const { query: { helpful } } = req || 0;
+    console.log(req.body);
+    const { body: { product_id } } = req;
+    const { body: { body } } = req;
+    const { body: { asker_name } } = req;
+    const { body: { asker_email } } = req;
     const params = {
-      id: id,
       product_id: product_id,
       body: body,
-      date_written: date_written // new Date().toISOString(),
+      date_written: new Date().toISOString(),
       asker_name: asker_name,
       asker_email: asker_email,
-      reported: reported,
-      helpful: helpful,
     }
     const post = postNewQuestion(params);
     res.status(200).send(post);

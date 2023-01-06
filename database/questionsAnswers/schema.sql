@@ -67,14 +67,14 @@ COPY orig_answers FROM '/Users/ErinAntoine/Hack Reactor Bootcamp Files/QA/rawdat
 
 COPY orig_answers_photos FROM '/Users/ErinAntoine/Hack Reactor Bootcamp Files/QA/rawdata/transformed_answers_photos.csv' WITH (FORMAT CSV, HEADER true);
 
-INSERT INTO questions (id, product_id, body, date_written, asker_name, asker_email, reported, helpful)
-SELECT id, product_id, body, date_written, asker_name, asker_email, reported, helpful
+INSERT INTO questions (product_id, body, date_written, asker_name, asker_email, reported, helpful)
+SELECT product_id, body, date_written, asker_name, asker_email, reported, helpful
 FROM orig_questions;
 
-INSERT INTO answers (answer_id, question_id, body, date_written, answerer_name, answerer_email, reported, helpful)
-SELECT answer_id, question_id, body, date_written, answerer_name, answerer_email, reported, helpful
+INSERT INTO answers (question_id, body, date_written, answerer_name, answerer_email, reported, helpful)
+SELECT question_id, body, date_written, answerer_name, answerer_email, reported, helpful
 FROM orig_answers;
 
-INSERT INTO answers_photos (photo_id, answer_id, url)
-SELECT photo_id, answer_id, url
+INSERT INTO answers_photos (answer_id, url)
+SELECT answer_id, url
 FROM orig_answers_photos;
