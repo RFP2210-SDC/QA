@@ -61,6 +61,10 @@ CREATE TABLE answers_photos (
   url        TEXT
 );
 
+CREATE INDEX idx_questions_product_id ON questions(product_id);
+CREATE INDEX idx_answers_question_id ON answers(question_id);
+CREATE INDEX idx_answers_photos_answer_id ON answers_photos(answer_id);
+
 COPY orig_questions FROM '/Users/ErinAntoine/Hack Reactor Bootcamp Files/QA/rawdata/transformed_questions.csv' WITH (FORMAT CSV, HEADER true);
 
 COPY orig_answers FROM '/Users/ErinAntoine/Hack Reactor Bootcamp Files/QA/rawdata/transformed_answers.csv' WITH (FORMAT CSV, HEADER true);

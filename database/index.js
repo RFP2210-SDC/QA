@@ -31,7 +31,7 @@ exports.getAllQuestions = (params) => {
     `SELECT questions.id AS question_id, questions.body AS question_body, questions.date_written AS question_date, questions.asker_name, questions.helpful AS question_helpfulness, questions.reported, json_object_agg(answers.answer_id, json_build_object('id', answers.answer_id, 'body', answers.body, 'date', answers.date_written, 'answerer_name', answers.answerer_name, 'helpfulness', answers.helpful)) AS answers
     FROM questions
     LEFT JOIN answers ON questions.id=answers.question_id
-    WHERE questions.product_id = ${product_id}
+    WHERE questions.product_id = ${product_id} AND answers.answer_id IS NOT NULL
     GROUP BY questions.id, answers.answer_id
     ORDER BY questions.id
     LIMIT ${count} OFFSET ${offset}`
@@ -94,6 +94,7 @@ exports.getAllAnswers = (params) => {
   const question_id = params.question_id;
   const page = params.page;
   const count = params.count;
+  const offset = (page -1) * count;
 
   console.log(params);
 
@@ -101,10 +102,10 @@ exports.getAllAnswers = (params) => {
     `SELECT answers.answer_id, answers.body, answers.date_written AS date, answers.answerer_name, answers.helpful AS helpfulness, json_agg(json_build_object('id', answers_photos.photo_id, 'url', answers_photos.url)) AS photos
     FROM answers
     LEFT JOIN answers_photos ON answers.answer_id=answers_photos.answer_id
-    WHERE answers.question_id = ${question_id}
+    WHERE answers.question_id = 40346
     GROUP BY answers.answer_id
     ORDER BY answers.answer_id
-    LIMIT ${count}`
+    LIMIT 5 OFFSET 0`
   );
 
   var result;
